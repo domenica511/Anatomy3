@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Реалії</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <style>
+        :root { --primary: #0d6efd; --dark: #212529; --light: #f8f9fa; }
+        .dark-mode { --primary: #4dabf7; --dark: #f8f9fa; --light: #212529; }
+        body { background: var(--light); color: var(--dark); transition: all 0.3s; }
+        .realia-item { padding: 18px; background: white; border-radius: 12px; margin-bottom: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .search-container { position: relative; max-width: 500px; margin: 0 auto 30px; }
+        .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #6c757d; }
+        .dark-mode .realia-item { background: #2c3034; color: #e9ecef; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="index.html"><i class="fas fa-book-open"></i> Реалії в перекладі</a>
+        <div class="ms-auto d-flex align-items-center">
+            <i class="fas fa-moon theme-toggle" id="themeToggle"></i>
+        </div>
+    </div>
+</nav>
+
+<div class="container my-5">
+    <h2 class="text-center mb-4" data-aos="fade-up">Реалії роману (100+)</h2>
+    <div class="search-container" data-aos="fade-up" data-aos-delay="100">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" id="searchInput" class="form-control ps-5" placeholder="Пошук реалій...">
+    </div>
+    <div class="row g-4" id="realiiList" data-aos="fade-up" data-aos-delay="200"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+    AOS.init();
+
+    const defaultRealii = [
+        { term: "haggis", desc: "Традиційна шотландська страва з овечого шлунку, фаршированого субпродуктами." },
+        { term: "kilt", desc: "Традиційна шотландська спідниця для чоловіків." },
+        { term: "Edinburgh", desc: "Столиця Шотландії, місце дії роману." },
+        { term: "resurrection men", desc: "Люди, які викопували тіла з кладовищ для анатомічних шкіл." },
+        { term: "anatomical theatre", desc: "Місце для публічних розтинів і навчання медиків." },
+        { term: "physician’s bag", desc: "Сумка лікаря з інструментами для домашніх візитів." },
+        { term: "Edinburgh’s underworld", desc: "Підпільний світ міста, пов’язаний із криміналом." },
+        { term: "grave-robbing", desc: "Грабіж могил для постачання тіл анатомам." },
+        { term: "gentleman’s attire", desc: "Одяг аристократів XIX століття." },
+        { term: "society ball", desc: "Світський бал шотландської еліти." },
+        { term: "dissection table", desc: "Стіл для розтину тіл у медичних школах." },
+        { term: "medical lecture hall", desc: "Зала для лекцій у медичних університетах." },
+        { term: "Burke and Hare’s shadow", desc: "Тінь злочинів відомих постачальників тіл." },
+        { term: "apothecary shop", desc: "Аптека XIX століття." },
+        { term: "gaslight streets", desc: "Вулиці з газовим освітленням." },
+        { term: "charity hospital", desc: "Благодійна лікарня для бідних." },
+        { term: "surgeon’s apron", desc: "Фартух хірурга під час операцій." },
+        { term: "body snatching", desc: "Викрадення тіл із кладовищ." },
+        { term: "anatomical wax models", desc: "Воскові моделі для навчання анатомії." },
+        { term: "Galvanism", desc: "Експерименти з електрикою на тілах." },
+        { term: "cholera outbreak", desc: "Спалах холери 1832 року в Единбурзі." },
+        { term: "surgical theatre", desc: "Хірургічний театр для публічних операцій." },
+        { term: "cadaver trade", desc: "Торгівля трупами." },
+        { term: "resurrectionists", desc: "Альтернативна назва грабіжників могил." },
+        { term: "phrenology", desc: "Псевдонаука про зв’язок черепа і характеру." },
+        { term: "laudanum", desc: "Опіумна настоянка як знеболювальне." },
+        { term: "Burke and Hare’s trade", desc: "Торгівля тілами вбивцями." },
+        { term: "anatomical moulages", desc: "Гіпсові або воскові анатомічні моделі." },
+        { term: "Edinburgh Castle", desc: "Історична фортеця в центрі міста." },
+        { term: "Royal Mile", desc: "Головна вулиця Старого міста." },
+        { term: "bagpipes", desc: "Шотландська волинка." },
+        { term: "ceilidh", desc: "Традиційний шотландський танець і музика." },
+        { term: "clan", desc: "Шотландський рід або клан." },
+        { term: "tartan", desc: "Тканина з клітинчастим візерунком." },
+        { term: "Highland games", desc: "Традиційні спортивні змагання." },
+        { term: "Scots", desc: "Шотландська мова." },
+        { term: "whisky", desc: "Традиційний шотландський напій." },
+        { term: "shortbread", desc: "Шотландське печиво." },
+        { term: "porridge", desc: "Вівсяна каша." },
+        { term: "neeps and tatties", desc: "Ріпа і картопля — традиційна гарнір." },
+        { term: "black bun", desc: "Новорічний пиріг." },
+        { term: "Hogmanay", desc: "Шотландський Новий рік." },
+        { term: "first-footing", desc: "Традиція першого гостя в Новому році." },
+        { term: "Burns Night", desc: "Вечір на честь Роберта Бернса." },
+        { term: "Auld Lang Syne", desc: "Традиційна пісня на Новий рік." },
+        { term: "Jacobite", desc: "Прихильник династії Стюартів." },
+        { term: "Culloden", desc: "Битва 1746 року." },
+        { term: "Bonnie Prince Charlie", desc: "Претендент на трон." },
+        { term: "plaid", desc: "Шотландський плед." },
+        { term: "sporran", desc: "Сумка на поясі до кілта." },
+        { term: "sgian-dubh", desc: "Ніж у панчосі." },
+        { term: "dirk", desc: "Шотландський кинджал." },
+        { term: "broadsword", desc: "Шотландський меч." },
+        { term: "claymore", desc: "Великий дворучний меч." },
+        { term: "cabers", desc: "Стовбури для метання." },
+        { term: "stone put", desc: "Метання каменю." },
+        { term: "tug o’ war", desc: "Перетягування каната." },
+        { term: "Edinburgh Festival", desc: "Міжнародний фестиваль мистецтв." },
+        { term: "Fringe", desc: "Альтернативний фестиваль." },
+        { term: "Military Tattoo", desc: "Військовий парад на замку." },
+        { term: "Loch Ness", desc: "Озеро з легендою про монстра." },
+        { term: "Nessie", desc: "Міфічний монстр." },
+        { term: "Ben Nevis", desc: "Найвища гора Британії." },
+        { term: "Isle of Skye", desc: "Острів із драматичними пейзажами." },
+        { term: "Glencoe", desc: "Долина з трагічною історією." },
+        { term: "St Andrews", desc: "Місце зародження гольфу." },
+        { term: "Old Course", desc: "Найстаріше поле для гольфу." },
+        { term: "Robert the Bruce", desc: "Король Шотландії." },
+        { term: "William Wallace", desc: "Герой війни за незалежність." },
+        { term: "Braveheart", desc: "Фільм про Воллеса." },
+        { term: "Stone of Destiny", desc: "Камінь коронації шотландських королів." },
+        { term: "Thistle", desc: "Національна емблема Шотландії." },
+        { term: "Saltire", desc: "Шотландський прапор." },
+        { term: "Lion Rampant", desc: "Королівський штандарт." },
+        { term: "Unicorn", desc: "Єдиноріг — символ Шотландії." },
+        { term: "Bagpipe bands", desc: "Оркестри волинок." },
+        { term: "Highland dance", desc: "Танці горців." },
+        { term: "Reel", desc: "Швидкий шотландський танець." },
+        { term: "Strathspey", desc: "Повільний шотландський танець." },
+        { term: "Fling", desc: "Танець із метанням ніг." },
+        { term: "Sword Dance", desc: "Танець на мечах." },
+        { term: "Cabertossing", desc: "Метання стовбура." },
+        { term: "Haggis hurling", desc: "Метання хаггіса." },
+        { term: "Sheepdog trials", desc: "Змагання пастуших собак." },
+        { term: "Curling", desc: "Шотландська гра на льоду." },
+        { term: "Shinty", desc: "Шотландський хокей." },
+        { term: "Caber", desc: "Дерев’яний стовбур." },
+        { term: "Hammer throw", desc: "Метання молота." },
+        { term: "Weight over bar", desc: "Метання гирі через перекладину." },
+        { term: "Maide Leisg", desc: "Шотландська боротьба на палицях." },
+        { term: "Pibroch", desc: "Класична музика для волинки." },
+        { term: "Ceilidh band", desc: "Музичний колектив для танців." },
+        { term: "Fiddle", desc: "Скрипка в шотландській музиці." },
+        { term: "Accordion", desc: "Акордеон у фолку." },
+        { term: "Bodhrán", desc: "Ірландський барабан (поширений у Шотландії)." },
+        { term: "Great Highland Bagpipe", desc: "Велика шотландська волинка." },
+        { term: "Smallpipes", desc: "Менша волинка." },
+        { term: "Border pipes", desc: "Прикордонна волинка." },
+        { term: "Uilleann pipes", desc: "Ірландська волинка (іноді в Шотландії)." },
+        { term: "Tin whistle", desc: "Металева флейта." },
+        { term: "Clàrsach", desc: "Шотландська арфа." },
+        { term: "Gaelic psalm singing", desc: "Спів псалмів гельською." },
+        { term: "Waukling song", desc: "Пісня під час обробки вовни." }
+        // Додано 100+
+    ];
+
+    // Ініціалізація
+    if (!localStorage.getItem('realii')) {
+        localStorage.setItem('realii', JSON.stringify(defaultRealii));
+    }
+
+    function loadRealii(filter = '') {
+        const data = JSON.parse(localStorage.getItem('realii'));
+        const filtered = data.filter(r => 
+            r.term.toLowerCase().includes(filter) || 
+            r.desc.toLowerCase().includes(filter)
+        );
+        const list = document.getElementById('realiiList');
+        list.innerHTML = filtered.map(r => `
+            <div class="col-md-6">
+                <div class="realia-item">
+                    <h6 class="fw-bold text-primary">${r.term}</h6>
+                    <p class="mb-0">${r.desc}</p>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    document.getElementById('searchInput').addEventListener('input', e => 
+        loadRealii(e.target.value.toLowerCase())
+    );
+
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+    if (localStorage.getItem('theme') === 'dark') body.classList.add('dark-mode');
+    themeToggle.classList.add(localStorage.getItem('theme') === 'dark' ? 'fa-sun' : 'fa-moon');
+    themeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark-mode');
+        const isDark = body.classList.contains('dark-mode');
+        themeToggle.classList.toggle('fa-moon', !isDark);
+        themeToggle.classList.toggle('fa-sun', isDark);
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+
+    loadRealii();
+</script>
+</body>
+</html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Адмін-панель</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background: #f8f9fa; font-family: 'Segoe UI', sans-serif; }
+        .admin-container { 
+            max-width: 1000px; 
+            margin: 40px auto; 
+            padding: 30px; 
+            background: white; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12); 
+        }
+        .section { margin-bottom: 50px; border-bottom: 1px solid #dee2e6; padding-bottom: 30px; }
+        .section:last-child { border-bottom: none; }
+        .section h4 { color: #0d6efd; font-weight: 600; margin-bottom: 20px; }
+        .item { 
+            padding: 14px; 
+            background: #f8f9fa; 
+            border-radius: 10px; 
+            margin-bottom: 10px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            font-size: 0.95rem; 
+            transition: all 0.2s;
+        }
+        .item:hover { background: #e9ecef; }
+        .item strong { color: #0d6efd; }
+        .input-group .btn { border-radius: 0 8px 8px 0; }
+        .option-group { margin-bottom: 10px; }
+        .option-group .input-group-text { background: #e9ecef; }
+        .btn-add-option { font-size: 0.85rem; }
+        .alert { margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="admin-container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0"><i class="fas fa-cog text-primary"></i> Адмін-панель</h2>
+        <a href="index.html" class="btn btn-outline-secondary"><i class="fas fa-home"></i> На головну</a>
+    </div>
+    <p class="text-muted">Пароль: <code>12345</code> (вже введено)</p>
+
+    <!-- ВПРАВИ -->
+    <div class="section">
+        <h4><i class="fas fa-edit"></i> Вправи</h4>
+        <div class="input-group mb-3">
+            <input type="text" id="newExercise" class="form-control" placeholder="Текст вправи...">
+            <button class="btn btn-primary" onclick="addExercise()"><i class="fas fa-plus"></i> Додати</button>
+        </div>
+        <div id="exercisesList"></div>
+    </div>
+
+    <!-- ТЕСТИ -->
+    <div class="section">
+        <h4><i class="fas fa-question-circle"></i> Тести</h4>
+        <div class="mb-3">
+            <input type="text" id="qQuestion" class="form-control mb-3" placeholder="Питання тесту...">
+            <div id="optionsContainer">
+                <div class="option-group">
+                    <div class="input-group mb-2">
+                        <input type="text" class="form-control option-input" placeholder="Варіант відповіді">
+                        <div class="input-group-text">
+                            <input type="radio" name="correct" value="0">
+                            <span class="ms-2">Правильна</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-sm btn-outline-secondary mb-2 btn-add-option" onclick="addOption()">
+                <i class="fas fa-plus-circle"></i> Додати варіант
+            </button>
+            <button class="btn btn-success w-100" onclick="addTest()">
+                <i class="fas fa-check"></i> Додати тест
+            </button>
+        </div>
+        <div id="testsList"></div>
+    </div>
+
+    <!-- РЕАЛІЇ -->
+    <div class="section">
+        <h4><i class="fas fa-globe"></i> Реалії</h4>
+        <div class="row g-3 mb-3">
+            <div class="col-md-5">
+                <input type="text" id="rTerm" class="form-control" placeholder="Термін (напр. haggis)">
+            </div>
+            <div class="col-md-5">
+                <input type="text" id="rDesc" class="form-control" placeholder="Опис...">
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary w-100" onclick="addRealia()">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </div>
+        <div id="realiiList"></div>
+    </div>
+
+    <!-- ПЕРЕКЛАДИ -->
+    <div class="section">
+        <h4><i class="fas fa-language"></i> Переклади реалій</h4>
+        <div class="row g-3 mb-3">
+            <div class="col-md-3">
+                <input type="text" id="tOriginal" class="form-control" placeholder="Оригінал (англ.)">
+            </div>
+            <div class="col-md-3">
+                <input type="text" id="tTranslation" class="form-control" placeholder="Переклад (укр.)">
+            </div>
+            <div class="col-md-3">
+                <input type="text" id="tStrategy" class="form-control" placeholder="Стратегія">
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-primary w-100" onclick="addTranslation()">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </div>
+        <div id="translationsList"></div>
+    </div>
+
+    <!-- ГЛОСАРІЙ -->
+    <div class="section">
+        <h4><i class="fas fa-book"></i> Глосарій</h4>
+        <div class="row g-3 mb-3">
+            <div class="col-md-5">
+                <input type="text" id="gTerm" class="form-control" placeholder="Термін (напр. Реалія)">
+            </div>
+            <div class="col-md-5">
+                <input type="text" id="gDesc" class="form-control" placeholder="Визначення...">
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary w-100" onclick="addGlossary()">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+        </div>
+        <div id="glossaryList"></div>
+    </div>
+
+    <div class="text-center mt-4">
+        <button class="btn btn-danger" onclick="clearAllData()">
+            <i class="fas fa-trash"></i> Очистити всі дані
+        </button>
+    </div>
+</div>
+
+<script>
+    // === ЗАГАЛЬНІ ФУНКЦІЇ ===
+    function loadItems(key, containerId, renderFn = null) {
+        const data = JSON.parse(localStorage.getItem(key) || '[]');
+        const container = document.getElementById(containerId);
+        container.innerHTML = data.length > 0 ? data.map((item, i) => `
+            <div class="item">
+                <div>${renderFn ? renderFn(item) : item}</div>
+                <button class="btn btn-sm btn-outline-danger" onclick="deleteItem('${key}', ${i})">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `).join('') : `<p class="text-muted text-center">Немає елементів.</p>`;
+    }
+
+    function deleteItem(key, index) {
+        const data = JSON.parse(localStorage.getItem(key) || '[]');
+        data.splice(index, 1);
+        localStorage.setItem(key, JSON.stringify(data));
+        loadItems(key, `${key}List`, key === 'realii' || key === 'glossary' ? renderObject : (key === 'quiz' ? renderTest : null));
+    }
+
+    // === ВПРАВИ ===
+    function addExercise() {
+        const value = document.getElementById('newExercise').value.trim();
+        if (!value) return alert('Введіть текст вправи!');
+        const data = JSON.parse(localStorage.getItem('exercises') || '[]');
+        data.push(value);
+        localStorage.setItem('exercises', JSON.stringify(data));
+        document.getElementById('newExercise').value = '';
+        loadItems('exercises', 'exercisesList');
+    }
+
+    // === ТЕСТИ ===
+    function addOption() {
+        const container = document.getElementById('optionsContainer');
+        const index = container.children.length;
+        const div = document.createElement('div');
+        div.className = 'option-group';
+        div.innerHTML = `
+            <div class="input-group mb-2">
+                <input type="text" class="form-control option-input" placeholder="Варіант відповіді">
+                <div class="input-group-text">
+                    <input type="radio" name="correct" value="${index}">
+                    <span class="ms-2">Правильна</span>
+                </div>
+            </div>
+        `;
+        container.appendChild(div);
+    }
+
+    function addTest() {
+        const question = document.getElementById('qQuestion').value.trim();
+        const inputs = document.querySelectorAll('.option-input');
+        const options = Array.from(inputs).map(i => i.value.trim()).filter(v => v);
+        const correct = document.querySelector('input[name="correct"]:checked');
+        
+        if (!question || options.length < 2 || !correct) {
+            return alert('Заповніть питання, мінімум 2 варіанти та виберіть правильну відповідь!');
+        }
+
+        const test = { question, options, correct: parseInt(correct.value) };
+        const data = JSON.parse(localStorage.getItem('quiz') || '[]');
+        data.push(test);
+        localStorage.setItem('quiz', JSON.stringify(data));
+
+        // Скидаємо форму
+        document.getElementById('qQuestion').value = '';
+        document.getElementById('optionsContainer').innerHTML = `
+            <div class="option-group">
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control option-input" placeholder="Варіант відповіді">
+                    <div class="input-group-text">
+                        <input type="radio" name="correct" value="0">
+                        <span class="ms-2">Правильна</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        loadItems('quiz', 'testsList', renderTest);
+    }
+
+    // === РЕАЛІЇ ===
+    function addRealia() {
+        const term = document.getElementById('rTerm').value.trim();
+        const desc = document.getElementById('rDesc').value.trim();
+        if (!term || !desc) return alert('Заповніть термін і опис!');
+        const data = JSON.parse(localStorage.getItem('realii') || '[]');
+        data.push({ term, desc });
+        localStorage.setItem('realii', JSON.stringify(data));
+        document.getElementById('rTerm').value = '';
+        document.getElementById('rDesc').value = '';
+        loadItems('realii', 'realiiList', renderObject);
+    }
+
+    // === ГЛОСАРІЙ ===
+    function addGlossary() {
+        const term = document.getElementById('gTerm').value.trim();
+        const desc = document.getElementById('gDesc').value.trim();
+        if (!term || !desc) return alert('Заповніть термін і визначення!');
+        const data = JSON.parse(localStorage.getItem('glossary') || '[]');
+        data.push({ term, desc });
+        localStorage.setItem('glossary', JSON.stringify(data));
+        document.getElementById('gTerm').value = '';
+        document.getElementById('gDesc').value = '';
+        loadItems('glossary', 'glossaryList', renderObject);
+    }
+
+    // === РЕНДЕРИНГ ===
+    function renderObject(item) {
+        return `<strong>${item.term}</strong>: ${item.desc}`;
+    }
+
+    function renderTest(test) {
+        return `<div>
+            <strong>${test.question}</strong><br>
+            <small class="text-success">Правильна: ${test.options[test.correct]}</small>
+            <div class="text-muted small mt-1">${test.options.join(' • ')}</div>
+        </div>`;
+    }
+
+    // === ОЧИЩЕННЯ ===
+    function clearAllData() {
+        if (confirm('УВАГА! Ви впевнені, що хочете видалити ВСІ дані?')) {
+            ['exercises', 'quiz', 'realii', 'glossary'].forEach(key => localStorage.removeItem(key));
+            location.reload();
+        }
+    }
+
+    function addTranslation() {
+    const original = document.getElementById('tOriginal').value.trim();
+    const translation = document.getElementById('tTranslation').value.trim();
+    const strategy = document.getElementById('tStrategy').value.trim();
+    if (!original || !translation || !strategy) return alert('Заповніть усі поля!');
+    const data = JSON.parse(localStorage.getItem('translations') || '[]');
+    data.push({ original, translation, strategy });
+    localStorage.setItem('translations', JSON.stringify(data));
+    document.getElementById('tOriginal').value = '';
+    document.getElementById('tTranslation').value = '';
+    document.getElementById('tStrategy').value = '';
+    loadItems('translations', 'translationsList', renderTranslation);
+}
+
+    function renderTranslation(item) {
+        return `<strong>${item.original}</strong> → ${item.translation} <small class="text-muted">[${item.strategy}]</small>`;
+    }
+
+    // === ІНІЦІАЛІЗАЦІЯ ===
+    window.onload = () => {
+        loadItems('exercises', 'exercisesList');
+        loadItems('quiz', 'testsList', renderTest);
+        loadItems('realii', 'realiiList', renderObject);
+        loadItems('glossary', 'glossaryList', renderObject);
+        loadItems('translations', 'translationsList', renderTranslation);
+    };
+</script>
+</body>
+</html>

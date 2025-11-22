@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Глосарій</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <style>
+        :root { --primary: #0d6efd; --dark: #212529; --light: #f8f9fa; }
+        .dark-mode { --primary: #4dabf7; --dark: #f8f9fa; --light: #212529; }
+        body { background: var(--light); color: var(--dark); transition: all 0.3s; }
+        .glossary-item { padding: 18px; background: white; border-radius: 12px; margin-bottom: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .search-container { position: relative; max-width: 500px; margin: 0 auto 30px; }
+        .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #6c757d; }
+        .dark-mode .glossary-item { background: #2c3034; color: #e9ecef; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="index.html"><i class="fas fa-book-open"></i> Реалії в перекладі</a>
+        <div class="ms-auto d-flex align-items-center">
+            <i class="fas fa-moon theme-toggle" id="themeToggle"></i>
+        </div>
+    </div>
+</nav>
+
+<div class="container my-5">
+    <h2 class="text-center mb-4" data-aos="fade-up">Глосарій (100+ термінів)</h2>
+    <div class="search-container" data-aos="fade-up" data-aos-delay="100">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" id="searchInput" class="form-control ps-5" placeholder="Пошук термінів...">
+    </div>
+    <div class="row g-4" id="glossaryList" data-aos="fade-up" data-aos-delay="200"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+    AOS.init();
+
+    const defaultGlossary = [
+        { term: "Реалія", desc: "Лексична одиниця, що позначає об'єкт або явище, характерне для певної культури." },
+        { term: "Доместикація", desc: "Стратегія адаптації тексту до культури мови перекладу." },
+        { term: "Форенізація", desc: "Стратегія збереження оригінальної форми реалії." },
+        { term: "Калькування", desc: "Дослівний переклад складових частини реалії." },
+        { term: "Транслітерація", desc: "Передача звукової форми слова." },
+        { term: "Описовий переклад", desc: "Заміна реалії описом." },
+        { term: "Аналог", desc: "Еквівалент у цільовій культурі." },
+        { term: "Екзотизація", desc: "Підкреслення чужості елемента." },
+        { term: "Гіперонімія", desc: "Заміна конкретного загальним." },
+        { term: "Гіпонімія", desc: "Заміна загального конкретним." },
+        { term: "Компенсація", desc: "Відтворення ефекту іншим засобом." },
+        { term: "Примітка", desc: "Пояснення в тексті або внизу сторінки." },
+        { term: "Адаптація", desc: "Загальна стратегія наближення до читача." },
+        { term: "Локалізація", desc: "Повна адаптація до локальної культури." },
+        { term: "Культурний фільтр", desc: "Механізм сприйняття чужої культури." },
+        { term: "Культурна специфіка", desc: "Особливості, притаманні культурі." },
+        { term: "Етноцентризм", desc: "Погляд з позиції власної культури." },
+        { term: "Культурний шок", desc: "Реакція на чужу культуру." },
+        { term: "Інтертекстуальність", desc: "Посилання на інші тексти." },
+        { term: "Алюзія", desc: "Непрямий натяк на відомий факт." },
+        { term: "Коннотація", desc: "Додаткове емоційне забарвлення." },
+        { term: "Денотація", desc: "Пряме значення слова." },
+        { term: "Семантичне поле", desc: "Група слів із спільним значенням." },
+        { term: "Лакуна", desc: "Відсутність еквівалента в мові." },
+        { term: "Безеквівалентна лексика", desc: "Слова без прямого перекладу." },
+        { term: "Екзотизм", desc: "Слово, що підкреслює чужість." },
+        { term: "Барбаризм", desc: "Чужомовне слово в тексті." },
+        { term: "Ксенонім", desc: "Назва чужої реальності." },
+        { term: "Топонім", desc: "Назва географічного об’єкта." },
+        { term: "Етнонім", desc: "Назва народу." },
+        { term: "Антропонім", desc: "Ім’я людини." },
+        { term: "Хрононім", desc: "Назва історичної події." },
+        { term: "Міфонім", desc: "Назва міфічного об’єкта." },
+        { term: "Гідронім", desc: "Назва водойми." },
+        { term: "Оронім", desc: "Назва гори." },
+        { term: "Функціональна заміна", desc: "Заміна за функцією." },
+        { term: "Модальна адаптація", desc: "Зміна модальності." },
+        { term: "Стилістична адаптація", desc: "Зміна стилю." },
+        { term: "Культурна трансплантація", desc: "Перенесення елемента культури." },
+        { term: "Культурний трансфер", desc: "Передача культурних елементів." },
+        { term: "Культурна конвергенція", desc: "Зближення культур." },
+        { term: "Культурна дивергенція", desc: "Розходження культур." },
+        { term: "Культурний імперіалізм", desc: "Нав’язування культури." },
+        { term: "Глокалізація", desc: "Глобальне + локальне." },
+        { term: "Транскультурація", desc: "Змішування культур." },
+        { term: "Культурний гібрид", desc: "Поєднання культур." },
+        { term: "Культурний код", desc: "Система символів культури." },
+        { term: "Культурний маркер", desc: "Ознака культури." },
+        { term: "Культурний стереотип", desc: "Спрощений образ культури." },
+        { term: "Культурний контекст", desc: "Середовище культури." },
+        { term: "Культурна компетенція", desc: "Знання культури." },
+        { term: "Культурна сенситивність", desc: "Чутливість до культури." },
+        { term: "Культурний шок", desc: "Реакція на чужу культуру." },
+        { term: "Культурна адаптація", desc: "Пристосування до культури." },
+        { term: "Культурна асиміляція", desc: "Повне злиття з культурою." },
+        { term: "Культурна інтеграція", desc: "Поєднання культур." },
+        { term: "Культурна сегрегація", desc: "Відокремлення культур." },
+        { term: "Культурний плюралізм", desc: "Різноманіття культур." },
+        { term: "Культурний релятивізм", desc: "Кожна культура рівна." },
+        { term: "Культурний універсалізм", desc: "Спільні риси культур." },
+        { term: "Культурний детермінізм", desc: "Культура визначає поведінку." },
+        { term: "Культурний конструктивізм", desc: "Культура — конструкт." },
+        { term: "Культурний еволюціонізм", desc: "Розвиток культур." },
+        { term: "Культурний дифузіонізм", desc: "Поширення культурних елементів." },
+        { term: "Культурний ізоляціонізм", desc: "Ізоляція культури." },
+        { term: "Культурний синкретизм", desc: "Змішування релігій." },
+        { term: "Культурний аккультурація", desc: "Вплив однієї культури на іншу." },
+        { term: "Культурний імпорт", desc: "Запозичення елементів." },
+        { term: "Культурний експорт", desc: "Поширення власної культури." },
+        { term: "Культурний обмін", desc: "Взаємний обмін." },
+        { term: "Культурний діалог", desc: "Спілкування культур." },
+        { term: "Культурна ідентичність", desc: "Самосприйняття культури." },
+        { term: "Культурна пам’ять", desc: "Збереження традицій." },
+        { term: "Культурна спадщина", desc: "Матеріальна і нематеріальна спадщина." },
+        { term: "Культурний ландшафт", desc: "Пейзаж, змінений культурою." },
+        { term: "Культурний капітал", desc: "Знання і навички." },
+        { term: "Культурний габітус", desc: "Система схильностей." },
+        { term: "Культурний дискурс", desc: "Мова про культуру." },
+        { term: "Культурна семіотика", desc: "Знаки культури." },
+        { term: "Культурна антропологія", desc: "Вивчення культур." },
+        { term: "Культурна лінгвістика", desc: "Мова і культура." },
+        { term: "Культурна психологія", desc: "Психіка і культура." },
+        { term: "Культурна соціологія", desc: "Суспільство і культура." },
+        { term: "Культурна географія", desc: "Простір і культура." },
+        { term: "Культурна історія", desc: "Історія культури." },
+        { term: "Культурна філософія", desc: "Філософія культури." },
+        { term: "Культурна естетика", desc: "Мистецтво і культура." },
+        { term: "Культурна етика", desc: "Мораль і культура." },
+        { term: "Культурна політика", desc: "Державна політика в культурі." },
+        { term: "Культурна дипломатія", desc: "Культура у зовнішній політиці." },
+        { term: "Культурний туризм", desc: "Туризм заради культури." },
+        { term: "Культурний менеджмент", desc: "Управління культурою." },
+        { term: "Культурна індустрія", desc: "Виробництво культурних продуктів." },
+        { term: "Культурний продукт", desc: "Книга, фільм, музика." },
+        { term: "Культурний текст", desc: "Текст як носій культури." },
+        { term: "Культурний наратив", desc: "Історія культури." },
+        { term: "Культурний міф", desc: "Міф як частина культури." },
+        { term: "Культурний символ", desc: "Знак культури." },
+        { term: "Культурний архетип", desc: "Первинний образ." },
+        { term: "Культурний патерн", desc: "Модель поведінки." },
+        { term: "Культурний ритуал", desc: "Традиційна церемонія." },
+        { term: "Культурний фольклор", desc: "Народна творчість." },
+        { term: "Культурна традиція", desc: "Передача звичаїв." },
+        { term: "Культурна інновація", desc: "Нововведення в культурі." }
+        // 100+ термінів
+    ];
+
+    if (!localStorage.getItem('glossary')) {
+        localStorage.setItem('glossary', JSON.stringify(defaultGlossary));
+    }
+
+    function loadGlossary(filter = '') {
+        const data = JSON.parse(localStorage.getItem('glossary'));
+        const filtered = data.filter(g => 
+            g.term.toLowerCase().includes(filter) || 
+            g.desc.toLowerCase().includes(filter)
+        );
+        const list = document.getElementById('glossaryList');
+        list.innerHTML = filtered.map(g => `
+            <div class="col-md-6">
+                <div class="glossary-item">
+                    <h6 class="fw-bold text-primary">${g.term}</h6>
+                    <p class="mb-0">${g.desc}</p>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    document.getElementById('searchInput').addEventListener('input', e => 
+        loadGlossary(e.target.value.toLowerCase())
+    );
+
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+    if (localStorage.getItem('theme') === 'dark') body.classList.add('dark-mode');
+    themeToggle.classList.add(localStorage.getItem('theme') === 'dark' ? 'fa-sun' : 'fa-moon');
+    themeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark-mode');
+        const isDark = body.classList.contains('dark-mode');
+        themeToggle.classList.toggle('fa-moon', !isDark);
+        themeToggle.classList.toggle('fa-sun', isDark);
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+
+    loadGlossary();
+</script>
+</body>
+</html>
