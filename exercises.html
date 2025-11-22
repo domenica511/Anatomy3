@@ -35,11 +35,19 @@
 <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 <script>
     AOS.init();
-
+    const exercises= [
+        "EXERCISE 1: Answer the questions about Hazel Sinnett and her motivation to study anatomy: Why does she want to become a surgeon, what obstacles does she face as a woman in 19th-century Edinburgh, and how does she react to these obstacles?",
+  "EXERCISE 2: Describe the relationship between Hazel Sinnett and Jack Currer: How do their different social classes influence their behaviour, what draws them to each other, and what risks do they take for this connection?",
+  "EXERCISE 3: Vocabulary in context – fill in the gaps with one word: Hazel’s fascination with medical science represents her desire for ________; Jack works as a resurrection man, selling ________ to medical schools; society places strict ________ on women; Hazel shows great ________ and determination; Jack’s life reveals the harsh realities of urban ________.",
+  "EXERCISE 4: Character analysis – write 4–5 sentences: Choose one character (Hazel, Jack, Dr. Beecham or Bernard) and explain their main goal in the story, the moral choices they face, and how they change by the end of the novel.",
+  "EXERCISE 5: Quote interpretation – explain the meaning and link it to the story: “Love is not an exact science, but Hazel wished it were”; how does this quote reflect both Hazel’s feelings and her scientific way of thinking?"
+   ];
     function loadExercises() {
         const data = JSON.parse(localStorage.getItem('exercises') || '[]');
         const list = document.getElementById('exercisesList');
-        list.innerHTML = data.length ? data.map(ex => `<div class="exercise-item"><p class="mb-0">${ex}</p></div>`).join('') : '<p class="text-center text-muted">Вправ немає.</p>';
+        list.innerHTML = exercises.map(
+            ex => `<div class="exercise-item"><p class="mb-0">${ex}</p></div>`
+        ).join('') 
     }
 
     const themeToggle = document.getElementById('themeToggle');
@@ -57,4 +65,5 @@
     loadExercises();
 </script>
 </body>
+
 </html>
