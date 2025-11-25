@@ -40,8 +40,8 @@
     </div>
     <div id="quiz"></div>
     <div id="result" class="result" style="display: none;"></div>
-    <button class="btn btn-primary btn-next" id="nextBtn" style="display: none;" onclick="nextQuestion()">Далі</button>
-    <button class="btn btn-success" id="restartBtn" style="display: none;" onclick="restartQuiz()">Пройти ще раз</button>
+    <button class="btn btn-primary btn-next" id="nextBtn" style="display: none;" onclick="nextQuestion()">Next</button>
+    <button class="btn btn-success" id="restartBtn" style="display: none;" onclick="restartQuiz()">Retake</button>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
@@ -95,8 +95,8 @@
         document.getElementById('quiz').style.display = 'none';
         document.getElementById('nextBtn').style.display = 'none';
         const percent = Math.round((score / questions.length) * 100);
-        const msg = percent >= 70 ? 'Відмінно!' : percent >= 50 ? 'Добре!' : 'Спробуйте ще раз!';
-        document.getElementById('result').innerHTML = `<div class="text-success">${msg}</div><div>Правильних: ${score} з ${questions.length} (${percent}%)</div>`;
+        const msg = percent >= 70 ? 'Excellent!' : percent >= 50 ? 'Good!' : 'Try again!';
+        document.getElementById('result').innerHTML = `<div class="text-success">${msg}</div><div>Correct: ${score} з ${questions.length} (${percent}%)</div>`;
         document.getElementById('result').style.display = 'block';
         document.getElementById('restartBtn').style.display = 'block';
     }
@@ -126,3 +126,4 @@
 </body>
 
 </html>
+
