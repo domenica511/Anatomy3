@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Адмін-панель</title>
+    <title>Admin-panel</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -43,42 +43,42 @@
 
 <div class="admin-container">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="mb-0"><i class="fas fa-cog text-primary"></i> Адмін-панель</h2>
+        <h2 class="mb-0"><i class="fas fa-cog text-primary"></i>Admin-panel</h2>
         <a href="index.html" class="btn btn-outline-secondary"><i class="fas fa-home"></i> На головну</a>
     </div>
-    <p class="text-muted">Пароль: <code>12345</code> (вже введено)</p>
+    <p class="text-muted">Password: <code>12345</code> (already entered)</p>
 
     <!-- ВПРАВИ -->
     <div class="section">
-        <h4><i class="fas fa-edit"></i> Вправи</h4>
+        <h4><i class="fas fa-edit"></i> Exercises</h4>
         <div class="input-group mb-3">
-            <input type="text" id="newExercise" class="form-control" placeholder="Текст вправи...">
-            <button class="btn btn-primary" onclick="addExercise()"><i class="fas fa-plus"></i> Додати</button>
+            <input type="text" id="newExercise" class="form-control" placeholder="Exercise text...">
+            <button class="btn btn-primary" onclick="addExercise()"><i class="fas fa-plus"></i>Add</button>
         </div>
         <div id="exercisesList"></div>
     </div>
 
     <!-- ТЕСТИ -->
     <div class="section">
-        <h4><i class="fas fa-question-circle"></i> Тести</h4>
+        <h4><i class="fas fa-question-circle"></i>Tests</h4>
         <div class="mb-3">
-            <input type="text" id="qQuestion" class="form-control mb-3" placeholder="Питання тесту...">
+            <input type="text" id="qQuestion" class="form-control mb-3" placeholder="Test question...">
             <div id="optionsContainer">
                 <div class="option-group">
                     <div class="input-group mb-2">
-                        <input type="text" class="form-control option-input" placeholder="Варіант відповіді">
+                        <input type="text" class="form-control option-input" placeholder="Answer option">
                         <div class="input-group-text">
                             <input type="radio" name="correct" value="0">
-                            <span class="ms-2">Правильна</span>
+                            <span class="ms-2">Correct</span>
                         </div>
                     </div>
                 </div>
             </div>
             <button class="btn btn-sm btn-outline-secondary mb-2 btn-add-option" onclick="addOption()">
-                <i class="fas fa-plus-circle"></i> Додати варіант
+                <i class="fas fa-plus-circle"></i> Add option
             </button>
             <button class="btn btn-success w-100" onclick="addTest()">
-                <i class="fas fa-check"></i> Додати тест
+                <i class="fas fa-check"></i> Add test
             </button>
         </div>
         <div id="testsList"></div>
@@ -86,13 +86,13 @@
 
     <!-- РЕАЛІЇ -->
     <div class="section">
-        <h4><i class="fas fa-globe"></i> Реалії</h4>
+        <h4><i class="fas fa-globe"></i> Realia</h4>
         <div class="row g-3 mb-3">
             <div class="col-md-5">
-                <input type="text" id="rTerm" class="form-control" placeholder="Термін (напр. haggis)">
+                <input type="text" id="rTerm" class="form-control" placeholder="Term (e.g. haggis)">
             </div>
             <div class="col-md-5">
-                <input type="text" id="rDesc" class="form-control" placeholder="Опис...">
+                <input type="text" id="rDesc" class="form-control" placeholder="Description...">
             </div>
             <div class="col-md-2">
                 <button class="btn btn-primary w-100" onclick="addRealia()">
@@ -105,16 +105,16 @@
 
     <!-- ПЕРЕКЛАДИ -->
     <div class="section">
-        <h4><i class="fas fa-language"></i> Переклади реалій</h4>
+        <h4><i class="fas fa-language"></i> Translations of realia</h4>
         <div class="row g-3 mb-3">
             <div class="col-md-3">
-                <input type="text" id="tOriginal" class="form-control" placeholder="Оригінал (англ.)">
+                <input type="text" id="tOriginal" class="form-control" placeholder="Original (English)">
             </div>
             <div class="col-md-3">
-                <input type="text" id="tTranslation" class="form-control" placeholder="Переклад (укр.)">
+                <input type="text" id="tTranslation" class="form-control" placeholder="Translation (Ukrainian)">
             </div>
             <div class="col-md-3">
-                <input type="text" id="tStrategy" class="form-control" placeholder="Стратегія">
+                <input type="text" id="tStrategy" class="form-control" placeholder="Strategy">
             </div>
             <div class="col-md-3">
                 <button class="btn btn-primary w-100" onclick="addTranslation()">
@@ -127,13 +127,13 @@
 
     <!-- ГЛОСАРІЙ -->
     <div class="section">
-        <h4><i class="fas fa-book"></i> Глосарій</h4>
+        <h4><i class="fas fa-book"></i> Glossary</h4>
         <div class="row g-3 mb-3">
             <div class="col-md-5">
-                <input type="text" id="gTerm" class="form-control" placeholder="Термін (напр. Реалія)">
+                <input type="text" id="gTerm" class="form-control" placeholder="Term (e.g. Реалія)">
             </div>
             <div class="col-md-5">
-                <input type="text" id="gDesc" class="form-control" placeholder="Визначення...">
+                <input type="text" id="gDesc" class="form-control" placeholder="Definition...">
             </div>
             <div class="col-md-2">
                 <button class="btn btn-primary w-100" onclick="addGlossary()">
@@ -146,7 +146,7 @@
 
     <div class="text-center mt-4">
         <button class="btn btn-danger" onclick="clearAllData()">
-            <i class="fas fa-trash"></i> Очистити всі дані
+            <i class="fas fa-trash"></i> Clear all data 
         </button>
     </div>
 </div>
@@ -163,7 +163,7 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-        `).join('') : `<p class="text-muted text-center">Немає елементів.</p>`;
+        `).join('') : `<p class="text-muted text-center">No items.</p>`;
     }
 
     function deleteItem(key, index) {
@@ -176,7 +176,7 @@
     // === ВПРАВИ ===
     function addExercise() {
         const value = document.getElementById('newExercise').value.trim();
-        if (!value) return alert('Введіть текст вправи!');
+        if (!value) return alert('Enter the exercise text!');
         const data = JSON.parse(localStorage.getItem('exercises') || '[]');
         data.push(value);
         localStorage.setItem('exercises', JSON.stringify(data));
@@ -192,10 +192,10 @@
         div.className = 'option-group';
         div.innerHTML = `
             <div class="input-group mb-2">
-                <input type="text" class="form-control option-input" placeholder="Варіант відповіді">
+                <input type="text" class="form-control option-input" placeholder="Answer option">
                 <div class="input-group-text">
                     <input type="radio" name="correct" value="${index}">
-                    <span class="ms-2">Правильна</span>
+                    <span class="ms-2">Correct</span>
                 </div>
             </div>
         `;
@@ -209,7 +209,7 @@
         const correct = document.querySelector('input[name="correct"]:checked');
         
         if (!question || options.length < 2 || !correct) {
-            return alert('Заповніть питання, мінімум 2 варіанти та виберіть правильну відповідь!');
+            return alert('Fill in the question, add at least 2 options and select the correct answer!!');
         }
 
         const test = { question, options, correct: parseInt(correct.value) };
@@ -222,10 +222,10 @@
         document.getElementById('optionsContainer').innerHTML = `
             <div class="option-group">
                 <div class="input-group mb-2">
-                    <input type="text" class="form-control option-input" placeholder="Варіант відповіді">
+                    <input type="text" class="form-control option-input" placeholder="Answer option">
                     <div class="input-group-text">
                         <input type="radio" name="correct" value="0">
-                        <span class="ms-2">Правильна</span>
+                        <span class="ms-2">Correct</span>
                     </div>
                 </div>
             </div>
@@ -237,7 +237,7 @@
     function addRealia() {
         const term = document.getElementById('rTerm').value.trim();
         const desc = document.getElementById('rDesc').value.trim();
-        if (!term || !desc) return alert('Заповніть термін і опис!');
+        if (!term || !desc) return alert('Fill in the term and description!');
         const data = JSON.parse(localStorage.getItem('realii') || '[]');
         data.push({ term, desc });
         localStorage.setItem('realii', JSON.stringify(data));
@@ -250,7 +250,7 @@
     function addGlossary() {
         const term = document.getElementById('gTerm').value.trim();
         const desc = document.getElementById('gDesc').value.trim();
-        if (!term || !desc) return alert('Заповніть термін і визначення!');
+        if (!term || !desc) return alert('Fill in the term and definition!');
         const data = JSON.parse(localStorage.getItem('glossary') || '[]');
         data.push({ term, desc });
         localStorage.setItem('glossary', JSON.stringify(data));
@@ -267,14 +267,14 @@
     function renderTest(test) {
         return `<div>
             <strong>${test.question}</strong><br>
-            <small class="text-success">Правильна: ${test.options[test.correct]}</small>
+            <small class="text-success">Correct: ${test.options[test.correct]}</small>
             <div class="text-muted small mt-1">${test.options.join(' • ')}</div>
         </div>`;
     }
 
     // === ОЧИЩЕННЯ ===
     function clearAllData() {
-        if (confirm('УВАГА! Ви впевнені, що хочете видалити ВСІ дані?')) {
+        if (confirm('WARNING! Are you sure you want to delete ALL data?')) {
             ['exercises', 'quiz', 'realii', 'glossary'].forEach(key => localStorage.removeItem(key));
             location.reload();
         }
@@ -284,7 +284,7 @@
     const original = document.getElementById('tOriginal').value.trim();
     const translation = document.getElementById('tTranslation').value.trim();
     const strategy = document.getElementById('tStrategy').value.trim();
-    if (!original || !translation || !strategy) return alert('Заповніть усі поля!');
+    if (!original || !translation || !strategy) return alert('Please fill in all fields!');
     const data = JSON.parse(localStorage.getItem('translations') || '[]');
     data.push({ original, translation, strategy });
     localStorage.setItem('translations', JSON.stringify(data));
@@ -308,4 +308,5 @@
     };
 </script>
 </body>
+
 </html>
